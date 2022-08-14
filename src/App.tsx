@@ -2,9 +2,8 @@ import './App.css';
 import Table from './component/Table';
 import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
-import usePagination from './hook/usePagination';
-import Pagination from './component/Pagination';
-import NewPagination from './component/Pagination/newPagination';
+import Pagination from './component/Pagination/';
+import Loader from './component/Loader';
 
 export const column: columnData[] = [
 	{ field: 'name', header: 'Name' },
@@ -14,7 +13,7 @@ export const column: columnData[] = [
 	{ field: 'action', header: 'Action' },
 ];
 
-let PageSize = 10;
+let PAGE_SIZE = 10;
 
 function App() {
 	const [data, setData] = useState<Data[]>([]);
@@ -41,27 +40,19 @@ function App() {
 		fetchData();
 	}, []);
 
-	// const {
-	// 	firstContentIndex,
-	// 	lastContentIndex,
-	// 	nextPage,
-	// 	prevPage,
-	// 	page,
-	// 	setPage,
-	// 	totalPages,
-	// } = usePagination({
-	// 	contentPerPage: 10,
-	// 	count: data.length,
-	// });
+	const firstPageIndex = (currentPage - 1) * PAGE_SIZE;
+	const lastPageIndex = firstPageIndex + PAGE_SIZE;
+	const paginatedData = useMemo(
+		() => data.slice(firstPageIndex, lastPageIndex),
+		[firstPageIndex, lastPageIndex, data]
+	);
 
-	const firstPageIndex = (currentPage - 1) * PageSize;
-	const lastPageIndex = firstPageIndex + PageSize;
-	const paginatedData = data.slice(firstPageIndex, lastPageIndex);
+	console.log(firstPageIndex, lastPageIndex, paginatedData);
 
 	return (
 		<div className='App'>
 			<h1>Re-Useable React Data Grid</h1>
-			{data.length > 0 && (
+			{paginatedData.length > 0 ? (
 				<Table
 					data={paginatedData}
 					setData={setData}
@@ -69,21 +60,19 @@ function App() {
 					hover
 					striped
 					editable={true}
+					key={firstPageIndex + lastPageIndex}
 				/>
+			) : (
+				<div className='loader-container'>
+					{' '}
+					<Loader />
+				</div>
 			)}
-
-			{/* <Pagination
-				totalPages={totalPages}
-				setPage={setPage}
-				page={page}
-				nextPage={nextPage}
-				prevPage={prevPage}
-			/> */}
-			<NewPagination
+			<Pagination
 				className='pagination-bar'
 				currentPage={currentPage}
 				totalCount={data.length}
-				pageSize={PageSize}
+				pageSize={PAGE_SIZE}
 				onPageChange={(page: number) => setCurrentPage(page)}
 			/>
 		</div>

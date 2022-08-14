@@ -43,10 +43,3 @@ th {
 .hover:hover {
 	background-color: #61dafb;
 }
-
-.loader-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 50vh;
-}

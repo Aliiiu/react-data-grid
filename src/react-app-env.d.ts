@@ -5,12 +5,22 @@ declare module '*.jpeg';
 declare module '*.jpg';
 
 interface UsePaginationProps {
-	contentPerPage: number;
-	count: number;
+	totalCount: number;
+	pageSize: number;
+	siblingCount: number;
+	currentPage: number;
 }
 interface columnData {
 	field: string;
 	header: string;
+}
+interface PaginationProps {
+	onPageChange: Function;
+	totalCount: number;
+	siblingCount?: number;
+	currentPage: number;
+	pageSize: number;
+	className: string;
 }
 interface Data {
 	_id: string;

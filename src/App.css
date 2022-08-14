@@ -3,3 +3,10 @@
 	max-width: 1440px;
 	padding: 50px 100px;
 }
+
+.loader-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50vh;
+}

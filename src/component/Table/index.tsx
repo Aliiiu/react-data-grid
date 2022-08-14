@@ -3,7 +3,6 @@ import { column } from '../../App';
 import './table.css';
 import EditRowModal from '../EditRowModal';
 import axios from 'axios';
-import Loader from '../Loader';
 import CreateEmployeeModal from '../CreateEmployeeModal';
 
 const Table: FC<{
@@ -20,7 +19,6 @@ const Table: FC<{
 	const [sortedData, setSortedData] = useState<Data[]>(() => data);
 	const [rowId, setRowID] = useState<string>('');
 	const [order, setOrder] = useState<string>('ASC');
-	console.log('sortedData', sortedData, data);
 	const handleEditShow = (id: any, rowData: any) => setShowModal(true);
 
 	const getCaps = (head: string, field: string) => {
@@ -49,9 +47,6 @@ const Table: FC<{
 		return [];
 	};
 
-	const getSortedData = () => {};
-
-	// console.log(rowData);
 	const handleDelete = (id: string) => {
 		const url = `https://data-grid-api-2.herokuapp.com/employee/${id}`;
 		console.log(id);
@@ -71,14 +66,10 @@ const Table: FC<{
 			.catch((err) => console.log(err));
 	};
 
-	const postHandler = () => {
-		setShowPostModal(true);
-	};
-
 	return (
 		<div>
 			<div>
-				<button onClick={() => postHandler()} className='addBtn'>
+				<button onClick={() => setShowPostModal(true)} className='addBtn'>
 					Add New Employee
 				</button>
 			</div>
@@ -146,12 +137,12 @@ const Table: FC<{
 			{showPostModal && (
 				<CreateEmployeeModal onClick={() => setShowPostModal(false)} />
 			)}
-			{data.length === 0 ? (
+			{/* {data.length === 0 ? (
 				<div className='loader-container'>
 					{' '}
 					<Loader />
 				</div>
-			) : null}
+			) : null} */}
 			{showModal && (
 				<div>
 					<>
