@@ -1,0 +1,44 @@
+table {
+	font-family: Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th {
+	cursor: pointer;
+}
+
+td,
+th {
+	border: 1px #dddddd solid;
+	text-align: left;
+	padding: 8px;
+}
+
+.editBtn {
+	cursor: pointer;
+	padding: 4px 14px;
+	background-color: lightgreen;
+	border: 1px solide grey;
+	margin-right: 5px;
+}
+
+.deleteBtn {
+	cursor: pointer;
+	background-color: lightsalmon;
+	padding: 4px 14px;
+}
+
+.striped:nth-child(even) {
+	background-color: #dddddd;
+}
+.hover:hover {
+	background-color: #61dafb;
+}
+
+.loader-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50vh;
+}

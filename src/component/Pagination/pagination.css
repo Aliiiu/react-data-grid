@@ -1,0 +1,35 @@
+.pagination-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 50px;
+}
+
+.pagination {
+	display: flex;
+	gap: 64px;
+	align-items: center;
+}
+.navButton {
+	padding: 8px 14px;
+	border-radius: 8px;
+	border: 1px solid gray;
+}
+
+.page-container {
+	display: flex;
+	gap: 5px;
+}
+
+.page {
+	border-radius: 100%;
+	background-color: #f9f5ff;
+	width: 30px;
+	height: 30px;
+	padding: 5px;
+	border: 1px solid gray;
+}
+
+.active {
+	color: aquamarine;
+	border-color: aquamarine;
+}
