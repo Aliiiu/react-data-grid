@@ -17,10 +17,9 @@
 }
 
 input {
-	max-width: 100%;
+	width: 89%;
 	padding: 10px;
 	border-radius: 8px;
-	flex-shrink: 0;
 	border: 1px solid gray;
 }
 

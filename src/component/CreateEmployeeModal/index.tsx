@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+import './createmodal.css';
 
 const Backdrop: FC<{ onClick: () => void }> = ({ onClick }) => {
 	return <div className='backdrop' onClick={onClick} />;

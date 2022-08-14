@@ -51,7 +51,7 @@ function App() {
 
 	return (
 		<div className='App'>
-			<h1>Re-Useable React Data Grid</h1>
+			<h2>Re-Useable React Data Grid</h2>
 			{paginatedData.length > 0 ? (
 				<Table
 					data={paginatedData}

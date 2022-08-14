@@ -2,6 +2,7 @@ table {
 	font-family: Arial, Helvetica, sans-serif;
 	border-collapse: collapse;
 	width: 100%;
+	/* max-width: 1000px; */
 }
 
 th {
@@ -13,6 +14,7 @@ th {
 	border: 1px #dddddd solid;
 	text-align: left;
 	padding: 8px;
+	font-size: 12px;
 }
 
 .editBtn {
@@ -42,4 +44,11 @@ th {
 }
 .hover:hover {
 	background-color: #61dafb;
+}
+
+@media only screen and (min-width: 1080px) {
+	th,
+	td {
+		font-size: 18px;
+	}
 }
