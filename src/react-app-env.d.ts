@@ -12,7 +12,7 @@ interface columnData {
 	field: string;
 	header: string;
 }
-interface rawData {
+interface Data {
 	_id: string;
 	name: string;
 	gender: string;

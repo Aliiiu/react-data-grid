@@ -19,9 +19,6 @@ const Pagination = ({
 		<>
 			<div className='pagination-container'>
 				<div className='pagination'>
-					{/* <p className='text'>
-            {page}/{totalPages}
-          </p> */}
 					<button
 						onClick={prevPage}
 						className={`navButton ${page === 1 && 'disabled'}`}

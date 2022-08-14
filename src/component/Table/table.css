@@ -23,6 +23,14 @@ th {
 	margin-right: 5px;
 }
 
+.addBtn {
+	cursor: pointer;
+	padding: 4px 14px;
+	background-color: orange;
+	border: 1px solide grey;
+	margin-bottom: 5px;
+}
+
 .deleteBtn {
 	cursor: pointer;
 	background-color: lightsalmon;

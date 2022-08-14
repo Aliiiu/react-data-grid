@@ -1,9 +1,10 @@
 import './App.css';
 import Table from './component/Table';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import usePagination from './hook/usePagination';
 import Pagination from './component/Pagination';
+import NewPagination from './component/Pagination/newPagination';
 
 export const column: columnData[] = [
 	{ field: 'name', header: 'Name' },
@@ -13,10 +14,13 @@ export const column: columnData[] = [
 	{ field: 'action', header: 'Action' },
 ];
 
+let PageSize = 10;
+
 function App() {
-	const [data, setData] = useState<rawData[]>([]);
+	const [data, setData] = useState<Data[]>([]);
+	const [currentPage, setCurrentPage] = useState(1);
 	const fetchData = () => {
-		const url = 'http://localhost:8000/employee';
+		const url = 'https://data-grid-api-2.herokuapp.com/employee';
 		axios
 			.get(url)
 			.then((res) => {
@@ -25,9 +29,7 @@ function App() {
 				const { status, message, data } = result;
 
 				if (status === 'SUCCESS') {
-					setTimeout(() => setData(data), 5000);
-
-					console.log(data);
+					setData(data);
 				} else {
 					alert(message);
 				}
@@ -39,37 +41,50 @@ function App() {
 		fetchData();
 	}, []);
 
-	const {
-		firstContentIndex,
-		lastContentIndex,
-		nextPage,
-		prevPage,
-		page,
-		setPage,
-		totalPages,
-	} = usePagination({
-		contentPerPage: 5,
-		count: data.length,
-	});
+	// const {
+	// 	firstContentIndex,
+	// 	lastContentIndex,
+	// 	nextPage,
+	// 	prevPage,
+	// 	page,
+	// 	setPage,
+	// 	totalPages,
+	// } = usePagination({
+	// 	contentPerPage: 10,
+	// 	count: data.length,
+	// });
 
-	const paginatedData = data.slice(firstContentIndex, lastContentIndex);
+	const firstPageIndex = (currentPage - 1) * PageSize;
+	const lastPageIndex = firstPageIndex + PageSize;
+	const paginatedData = data.slice(firstPageIndex, lastPageIndex);
+
 	return (
 		<div className='App'>
 			<h1>Re-Useable React Data Grid</h1>
-			<Table
-				data={paginatedData}
-				setData={setData}
-				columns={column}
-				hover
-				striped
-				editable={true}
-			/>
-			<Pagination
+			{data.length > 0 && (
+				<Table
+					data={paginatedData}
+					setData={setData}
+					columns={column}
+					hover
+					striped
+					editable={true}
+				/>
+			)}
+
+			{/* <Pagination
 				totalPages={totalPages}
 				setPage={setPage}
 				page={page}
 				nextPage={nextPage}
 				prevPage={prevPage}
+			/> */}
+			<NewPagination
+				className='pagination-bar'
+				currentPage={currentPage}
+				totalCount={data.length}
+				pageSize={PageSize}
+				onPageChange={(page: number) => setCurrentPage(page)}
 			/>
 		</div>
 	);

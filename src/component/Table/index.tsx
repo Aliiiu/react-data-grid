@@ -4,9 +4,10 @@ import './table.css';
 import EditRowModal from '../EditRowModal';
 import axios from 'axios';
 import Loader from '../Loader';
+import CreateEmployeeModal from '../CreateEmployeeModal';
 
 const Table: FC<{
-	data: rawData[];
+	data: Data[];
 	setData: Function;
 	columns: columnData[];
 	hover: boolean;
@@ -14,10 +15,12 @@ const Table: FC<{
 	editable: boolean;
 }> = ({ data, setData, columns, hover, striped, editable }) => {
 	const [showModal, setShowModal] = useState(false);
-	const [updateData, setUpdateData] = useState<rawData>();
+	const [showPostModal, setShowPostModal] = useState(false);
+	const [selectedData, setSelectedData] = useState<Data>();
+	const [sortedData, setSortedData] = useState<Data[]>(() => data);
 	const [rowId, setRowID] = useState<string>('');
 	const [order, setOrder] = useState<string>('ASC');
-	// const newData = data;
+	console.log('sortedData', sortedData, data);
 	const handleEditShow = (id: any, rowData: any) => setShowModal(true);
 
 	const getCaps = (head: string, field: string) => {
@@ -26,26 +29,31 @@ const Table: FC<{
 	};
 
 	const sortHandler = (col: string) => {
-		console.log(col);
 		if (order === 'ASC') {
 			const sorted = [...data].sort((a: any, b: any) =>
 				a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
 			);
-			setData(sorted);
+			setSortedData(sorted);
 			setOrder('DESC');
+			return sorted;
 		}
 		if (order === 'DESC') {
 			const sorted = [...data].sort((a: any, b: any) =>
 				a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
 			);
-			setData(sorted);
+			setSortedData(sorted);
 			setOrder('ASC');
+			return sorted;
 		}
+
+		return [];
 	};
+
+	const getSortedData = () => {};
 
 	// console.log(rowData);
 	const handleDelete = (id: string) => {
-		const url = `http://localhost:8000/employee/${id}`;
+		const url = `https://data-grid-api-2.herokuapp.com/employee/${id}`;
 		console.log(id);
 		axios
 			.delete(url)
@@ -63,8 +71,17 @@ const Table: FC<{
 			.catch((err) => console.log(err));
 	};
 
+	const postHandler = () => {
+		setShowPostModal(true);
+	};
+
 	return (
 		<div>
+			<div>
+				<button onClick={() => postHandler()} className='addBtn'>
+					Add New Employee
+				</button>
+			</div>
 			<form>
 				<table>
 					<thead>
@@ -87,60 +104,61 @@ const Table: FC<{
 						</tr>
 					</thead>
 					<tbody>
-						{data &&
-							data.map((item) => (
-								<tr
-									key={item._id}
-									className={`${hover && 'hover'} ${striped && 'striped'}`}
-								>
-									<td>{item.name}</td>
-									<td>{item.gender}</td>
-									<td>{item.role}</td>
-									<td>{item.country}</td>
-									{editable && (
-										<td>
-											<>
-												<button
-													className='editBtn'
-													onClick={() =>
-														handleEditShow(
-															setRowID(item._id),
-															setUpdateData(item)
-														)
-													}
-													type='button'
-												>
-													Edit
-												</button>
-												<button
-													className='deleteBtn'
-													onClick={() => handleDelete(item._id)}
-													type='button'
-												>
-													Delete
-												</button>
-											</>
-										</td>
-									)}
-								</tr>
-							))}
+						{sortedData.map((item) => (
+							<tr
+								key={item._id}
+								className={`${hover && 'hover'} ${striped && 'striped'}`}
+							>
+								<td>{item.name}</td>
+								<td>{item.gender}</td>
+								<td>{item.role}</td>
+								<td>{item.country}</td>
+								{editable && (
+									<td>
+										<>
+											<button
+												className='editBtn'
+												onClick={() =>
+													handleEditShow(
+														setRowID(item._id),
+														setSelectedData(item)
+													)
+												}
+												type='button'
+											>
+												Edit
+											</button>
+											<button
+												className='deleteBtn'
+												onClick={() => handleDelete(item._id)}
+												type='button'
+											>
+												Delete
+											</button>
+										</>
+									</td>
+								)}
+							</tr>
+						))}
 					</tbody>
 				</table>
 			</form>
+			{showPostModal && (
+				<CreateEmployeeModal onClick={() => setShowPostModal(false)} />
+			)}
 			{data.length === 0 ? (
 				<div className='loader-container'>
 					{' '}
 					<Loader />
 				</div>
 			) : null}
-
 			{showModal && (
 				<div>
 					<>
-						{console.log(updateData)}
+						{console.log(selectedData)}
 						<EditRowModal
 							rowId={rowId}
-							formData={updateData}
+							formData={selectedData}
 							onClick={() => setShowModal(false)}
 						/>
 					</>

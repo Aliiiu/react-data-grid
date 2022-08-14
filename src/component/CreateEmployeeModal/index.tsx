@@ -1,42 +1,38 @@
 import React, { FC, Fragment, useState } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import './editRowModal.css';
 
 const Backdrop: FC<{ onClick: () => void }> = ({ onClick }) => {
 	return <div className='backdrop' onClick={onClick} />;
 };
 
-const ModalOverlay: FC<{
-	formData?: Data;
-	rowId?: string;
-}> = ({ formData, rowId }) => {
+const ModalOverlay: FC<{}> = () => {
 	const [addFormData, setAddFormData] = useState<{
 		name?: string;
 		gender?: string;
 		role?: string;
 		country?: string;
 	}>({
-		name: formData && formData.name,
-		gender: formData && formData.gender,
-		role: formData && formData.role,
-		country: formData && formData.country,
+		name: '',
+		gender: '',
+		role: '',
+		country: '',
 	});
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		console.log(addFormData);
-		const url = `https://data-grid-api-2.herokuapp.com/employee/${rowId}`;
+		// const url = `http://localhost:8000/employee`;
+		const url = `https://data-grid-api-2.herokuapp.com/employee`;
 		axios
-			.put(url, addFormData)
+			.post(url, { ...addFormData })
 			.then((res) => {
-				// console.log(res);
+				console.log(res);
 				const result = res.data;
-				const { status, message } = result;
-				if (status !== 'SUCCESS') {
-					alert(message);
+				if (result.success !== true) {
+					alert(result.error.message);
 				} else {
-					alert(message);
+					alert(result.message);
 					window.location.reload();
 				}
 			})
@@ -54,7 +50,6 @@ const ModalOverlay: FC<{
 						setAddFormData({ ...addFormData, name: e.target.value })
 					}
 					placeholder='Enter your name'
-					defaultValue={formData && formData.name}
 				/>
 			</div>
 			<div className='modal-element'>
@@ -67,7 +62,6 @@ const ModalOverlay: FC<{
 					onChange={(e) =>
 						setAddFormData({ ...addFormData, gender: e.target.value })
 					}
-					defaultValue={formData && formData.gender}
 				/>
 			</div>
 			<div className='modal-element'>
@@ -80,7 +74,6 @@ const ModalOverlay: FC<{
 					onChange={(e) =>
 						setAddFormData({ ...addFormData, role: e.target.value })
 					}
-					defaultValue={formData && formData.role}
 				/>
 			</div>
 			<div className='modal-element'>
@@ -93,34 +86,28 @@ const ModalOverlay: FC<{
 					onChange={(e) =>
 						setAddFormData({ ...addFormData, country: e.target.value })
 					}
-					defaultValue={formData && formData.country}
 				/>
 			</div>
 			<div>
 				<button className='editBtn' onClick={handleSubmit} type='submit'>
-					Update Row
+					Add New Employee
 				</button>
 			</div>
 		</div>
 	);
 };
 
-const EditRowModal: FC<{
+const CreateEmployeeModal: FC<{
 	onClick: () => void;
-	formData?: Data;
-	rowId?: string;
-}> = ({ onClick, formData, rowId }) => {
+}> = ({ onClick }) => {
 	const backdropRoot = document.getElementById('backdrop-root') as HTMLElement;
 	const overlayRoot = document.getElementById('backdrop-root') as HTMLElement;
 	return (
 		<Fragment>
 			{ReactDOM.createPortal(<Backdrop onClick={onClick} />, backdropRoot)}
-			{ReactDOM.createPortal(
-				<ModalOverlay formData={formData} rowId={rowId} />,
-				overlayRoot
-			)}
+			{ReactDOM.createPortal(<ModalOverlay />, overlayRoot)}
 		</Fragment>
 	);
 };
 
-export default EditRowModal;
+export default CreateEmployeeModal;

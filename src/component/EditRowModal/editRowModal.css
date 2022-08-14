@@ -45,3 +45,11 @@ input[type='text']:focus {
 	z-index: 10;
 	background: rgba(0, 0, 0, 0.4);
 }
+
+.editBtn {
+	cursor: pointer;
+	padding: 4px 14px;
+	background-color: lightgreen;
+	border: 1px solide grey;
+	margin-right: 5px;
+}
